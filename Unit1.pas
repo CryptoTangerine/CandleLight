@@ -74,7 +74,12 @@ type
     procedure Push_to_grid(row,col:integer; candleSet: TCandleSet; symbol,timeframe:string);
   end;
 
-var Form1: TForm1;
+const
+  DebugMode = {$IFDEF DEBUG}True{$ELSE}False{$ENDIF};
+
+var
+  Form1: TForm1;
+  data_path: string;
 
 implementation
 
@@ -124,8 +129,8 @@ begin
       var candle_index:= (i-1) mod candles_in_a_set;
       case i of
         1..5:   result.m1_candles     [candle_index] := c;
-        6..10:   result.m5_candles     [candle_index] := c;
-        11..15:  result.m15_candles    [candle_index] := c;
+        6..10:  result.m5_candles     [candle_index] := c;
+        11..15: result.m15_candles    [candle_index] := c;
         16..20: result.hourly_candles [candle_index] := c;
       end;
     end;
@@ -231,10 +236,10 @@ end;
 
 procedure TForm1.Cycle;
 begin
-  for var I := 1 to 7 do
+  for var I := 0 to 7 do
     begin
       var symbol:= StringGrid1.Cells[0, I];
-      var scenario:= parse_csv_file(symbol+'_ohlc_data.txt');
+      var scenario:= parse_csv_file(data_path+symbol+'_ohlc_data.txt');
 
       Push_to_grid(I,1,scenario.m1_candles,     symbol,'M1');
       Push_to_grid(I,2,scenario.m5_candles,     symbol,'M5');
@@ -257,7 +262,7 @@ end;
 procedure TForm1.FormShow(Sender: TObject);
 begin
   StringGrid1.RowCount := 8; // 7 data rows + 1 header row
-  StringGrid1.Cells[0, 0] := 'DXY (future)';
+  StringGrid1.Cells[0, 0] := 'DXY';
   StringGrid1.Cells[0, 1] := 'AUDUSD';
   StringGrid1.Cells[0, 2] := 'EURUSD';
   StringGrid1.Cells[0, 3] := 'GBPUSD';
@@ -266,7 +271,10 @@ begin
   StringGrid1.Cells[0, 6] := 'USDCHF';
   StringGrid1.Cells[0, 7] := 'USDJPY';
 
-  if not FileExists('AUDUSD_ohlc_data.txt') then
+  if debugMode then
+     data_path:= '../../Bin/';
+
+  if not FileExists(data_path+'AUDUSD_ohlc_data.txt') then
     begin
       Log('Cannot start, OHLC data not found in the folder');
       Log('Make sure the python script is running');

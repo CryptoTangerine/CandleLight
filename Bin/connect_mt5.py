@@ -14,7 +14,7 @@ timeframe_names = {
 timeframes = [mt5.TIMEFRAME_M1, mt5.TIMEFRAME_M5, mt5.TIMEFRAME_M15, mt5.TIMEFRAME_H1]
 
 # loop through each USD pair and extract the candles
-usd_pairs = ['AUDUSD', 'EURUSD', 'GBPUSD', 'NZDUSD', 'USDCAD', 'USDCHF', 'USDJPY']
+usd_pairs = ['DOLLAR', 'AUDUSD', 'EURUSD', 'GBPUSD', 'NZDUSD', 'USDCAD', 'USDCHF', 'USDJPY']
 
 ########################################################################################
 
@@ -51,7 +51,11 @@ while True:
         ohlc = extract_candles(symbol, timeframes)
         
         # save the OHLC data to a txt file
-        ohlc.to_csv(f"{symbol}_ohlc_data.txt", index=False)
+        if symbol == "DOLLAR":
+            filename = "DXY"
+        else:
+            filename = symbol
+        ohlc.to_csv(f"{filename}_ohlc_data.txt", index=False)
            
     time.sleep(5)
 

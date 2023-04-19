@@ -4,7 +4,7 @@
 
 1. Get latest python, unless you already have it
 2. install mt5 and pandas dependencies
-3. "pip install mt5"
+3. "pip install metatrader5"
 4. "pip install pandas"
 
 ## How to run this?

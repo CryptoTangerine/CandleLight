@@ -34,7 +34,7 @@ type
   TCandleSet = array[0..4] of candle;
 
   TScenario = record
-    m1_candles, m5_candles, m15_candles, hourly_candles: TCandleSet;
+    m1_candles, m5_candles, m15_candles, h1_candles, h4_candles, d1_candles: TCandleSet;
   end;
 
 type
@@ -60,6 +60,8 @@ type
     MenuItem3: TMenuItem;
     MenuItem_engulf_all_3: TMenuItem;
     MenuItem_engulf_wick: TMenuItem;
+    StringColumn6: TStringColumn;
+    StringColumn7: TStringColumn;
     procedure Button1Click(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure Timer1Timer(Sender: TObject);
@@ -128,10 +130,12 @@ begin
 
       var candle_index:= (i-1) mod candles_in_a_set;
       case i of
-        1..5:   result.m1_candles     [candle_index] := c;
-        6..10:  result.m5_candles     [candle_index] := c;
-        11..15: result.m15_candles    [candle_index] := c;
-        16..20: result.hourly_candles [candle_index] := c;
+        1..5:   result.m1_candles [candle_index] := c;
+        6..10:  result.m5_candles [candle_index] := c;
+        11..15: result.m15_candles[candle_index] := c;
+        16..20: result.h1_candles [candle_index] := c;
+        21..25: result.h4_candles [candle_index] := c;
+        26..30: result.d1_candles [candle_index] := c;
       end;
     end;
 
@@ -144,11 +148,57 @@ begin
 
 end;
 
+function calculateRSI(candles: array of candle): Double;
+var
+  i, upCount, downCount: integer;
+  avgUp, avgDown, RS, RSI: Double;
+begin
+  const period = 14;
+  if (Length(candles) < period + 1) then
+    raise Exception.Create('Not enough data points to calculate RSI.');
+
+  // Calculate initial average up and down values
+  avgUp := 0;
+  avgDown := 0;
+  for i := 1 to period do
+  begin
+    if candles[i].close > candles[i - 1].close then
+      avgUp := avgUp + (candles[i].close - candles[i - 1].close)
+    else
+      avgDown := avgDown + (candles[i - 1].close - candles[i].close);
+  end;
+  avgUp := avgUp / period;
+  avgDown := avgDown / period;
+
+  // Calculate RS and RSI
+  for i := period to Length(candles) - 1 do
+  begin
+    if candles[i].close > candles[i - 1].close then
+    begin
+      upCount := 1;
+      downCount := 0;
+    end
+    else
+    begin
+      upCount := 0;
+      downCount := 1;
+    end;
+
+    avgUp := ((avgUp * (period - 1)) + upCount * (candles[i].close - candles[i - 1].close)) / period;
+    avgDown := ((avgDown * (period - 1)) + downCount * (candles[i - 1].close - candles[i].close)) / period;
+
+    RS := avgUp / avgDown;
+    RSI := 100 - (100 / (1 + RS));
+  end;
+
+  Result := RSI;
+end;
+
 function BullishEngulfing(candleSet: TCandleSet): Boolean;
 var
   prev_candle_boundary: double;
 begin
-  var starting_index:= 0;
+  var starting_index:= 1;
   var prevCandle3:=   candleSet[starting_index];
   var prevCandle2:=   candleSet[starting_index+1];
   var prevCandle1:=   candleSet[starting_index+2];
@@ -175,7 +225,7 @@ function BearishEngulfing(candleSet: TCandleSet): Boolean;
 var
   prev_candle_boundary: double;
 begin
-  var starting_index:= 0;
+  var starting_index:= 1;
   var prevCandle3:=   candleSet[starting_index];
   var prevCandle2:=   candleSet[starting_index+1];
   var prevCandle1:=   candleSet[starting_index+2];
@@ -241,10 +291,12 @@ begin
       var symbol:= StringGrid1.Cells[0, I];
       var scenario:= parse_csv_file(data_path+symbol+'_ohlc_data.txt');
 
-      Push_to_grid(I,1,scenario.m1_candles,     symbol,'M1');
-      Push_to_grid(I,2,scenario.m5_candles,     symbol,'M5');
-      Push_to_grid(I,3,scenario.m15_candles,    symbol,'M15');
-      Push_to_grid(I,4,scenario.hourly_candles, symbol,'H1');
+      Push_to_grid(I,1,scenario.m1_candles, symbol,'M1');
+      Push_to_grid(I,2,scenario.m5_candles, symbol,'M5');
+      Push_to_grid(I,3,scenario.m15_candles,symbol,'M15');
+      Push_to_grid(I,4,scenario.h1_candles, symbol,'H1');
+      Push_to_grid(I,4,scenario.h4_candles, symbol,'H4');
+      Push_to_grid(I,4,scenario.d1_candles, symbol,'D1');
     end;
 end;
 
@@ -272,7 +324,14 @@ begin
   StringGrid1.Cells[0, 7] := 'USDJPY';
 
   if debugMode then
-     data_path:= '../../Bin/';
+    begin
+      data_path:= '../../Bin/';
+    end
+  else
+    begin
+      MenuItem_stay_on_top.IsChecked:= true;
+      form1.FormStyle:= TFormStyle.StayOnTop;
+    end;
 
   if not FileExists(data_path+'AUDUSD_ohlc_data.txt') then
     begin

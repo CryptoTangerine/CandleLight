@@ -5,8 +5,7 @@ object Form1: TForm1
   BorderStyle = Single
   Caption = 'Pomelo'#39's CandleLight'
   ClientHeight = 374
-  ClientWidth = 289
-  FormStyle = StayOnTop
+  ClientWidth = 391
   FormFactor.Width = 320
   FormFactor.Height = 480
   FormFactor.Devices = [Desktop]
@@ -17,13 +16,13 @@ object Form1: TForm1
     CanFocus = True
     ClipChildren = True
     Position.Y = 41.000000000000000000
-    Size.Width = 289.000000000000000000
+    Size.Width = 391.000000000000000000
     Size.Height = 210.000000000000000000
     Size.PlatformDefault = False
     TabOrder = 0
     RowCount = 8
     Options = [ColLines, RowLines, Header, HeaderClick, AutoDisplacement]
-    Viewport.Width = 285.000000000000000000
+    Viewport.Width = 387.000000000000000000
     Viewport.Height = 185.000000000000000000
     object StringColumn1: TStringColumn
       Header = 'Symbol'
@@ -45,21 +44,29 @@ object Form1: TForm1
       Header = 'H1'
       Size.Width = 50.000000000000000000
     end
+    object StringColumn6: TStringColumn
+      Header = 'H4'
+      Size.Width = 50.000000000000000000
+    end
+    object StringColumn7: TStringColumn
+      Header = 'D1'
+      Size.Width = 50.000000000000000000
+    end
   end
   object Memo1: TMemo
     Touch.InteractiveGestures = [Pan, LongTap, DoubleTap]
     DataDetectorTypes = []
     Align = Client
-    Size.Width = 289.000000000000000000
+    Size.Width = 391.000000000000000000
     Size.Height = 123.000000000000000000
     Size.PlatformDefault = False
     TabOrder = 1
-    Viewport.Width = 285.000000000000000000
+    Viewport.Width = 387.000000000000000000
     Viewport.Height = 119.000000000000000000
   end
   object Panel1: TPanel
     Align = MostTop
-    Size.Width = 289.000000000000000000
+    Size.Width = 391.000000000000000000
     Size.Height = 41.000000000000000000
     Size.PlatformDefault = False
     TabOrder = 4
@@ -108,7 +115,6 @@ object Form1: TForm1
       Text = 'Window'
       object MenuItem_stay_on_top: TMenuItem
         Locked = True
-        IsChecked = True
         Text = 'Stay on top'
         OnClick = MenuItem_stay_on_topClick
       end

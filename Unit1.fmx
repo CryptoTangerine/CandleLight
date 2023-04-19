@@ -1,0 +1,130 @@
+object Form1: TForm1
+  Left = 0
+  Top = 0
+  BorderIcons = [biSystemMenu, biMinimize]
+  BorderStyle = Single
+  Caption = 'Pomelo'#39's CandleLight'
+  ClientHeight = 374
+  ClientWidth = 289
+  FormStyle = StayOnTop
+  FormFactor.Width = 320
+  FormFactor.Height = 480
+  FormFactor.Devices = [Desktop]
+  OnShow = FormShow
+  DesignerMasterStyle = 0
+  object StringGrid1: TStringGrid
+    Align = Top
+    CanFocus = True
+    ClipChildren = True
+    Position.Y = 41.000000000000000000
+    Size.Width = 289.000000000000000000
+    Size.Height = 210.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 0
+    RowCount = 8
+    Options = [ColLines, RowLines, Header, HeaderClick, AutoDisplacement]
+    Viewport.Width = 285.000000000000000000
+    Viewport.Height = 185.000000000000000000
+    object StringColumn1: TStringColumn
+      Header = 'Symbol'
+      Size.Width = 80.000000000000000000
+    end
+    object StringColumn2: TStringColumn
+      Header = 'M1'
+      Size.Width = 50.000000000000000000
+    end
+    object StringColumn3: TStringColumn
+      Header = 'M5'
+      Size.Width = 50.000000000000000000
+    end
+    object StringColumn4: TStringColumn
+      Header = 'M15'
+      Size.Width = 50.000000000000000000
+    end
+    object StringColumn5: TStringColumn
+      Header = 'H1'
+      Size.Width = 50.000000000000000000
+    end
+  end
+  object Memo1: TMemo
+    Touch.InteractiveGestures = [Pan, LongTap, DoubleTap]
+    DataDetectorTypes = []
+    Align = Client
+    Size.Width = 289.000000000000000000
+    Size.Height = 123.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 1
+    Viewport.Width = 285.000000000000000000
+    Viewport.Height = 119.000000000000000000
+  end
+  object Panel1: TPanel
+    Align = MostTop
+    Size.Width = 289.000000000000000000
+    Size.Height = 41.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 4
+    object Button1: TButton
+      Position.X = 13.000000000000000000
+      Position.Y = 11.000000000000000000
+      Size.Width = 81.000000000000000000
+      Size.Height = 22.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 0
+      Text = 'Menu'
+      OnClick = Button1Click
+    end
+  end
+  object Timer1: TTimer
+    OnTimer = Timer1Timer
+    Left = 232
+    Top = 8
+  end
+  object PopupMenu1: TPopupMenu
+    Left = 152
+    Top = 8
+    object MenuItem4: TMenuItem
+      Text = 'Main loop'
+      object MenuItem_loop_enabled: TMenuItem
+        Locked = True
+        Text = 'Enabled'
+        OnClick = MenuItem_loop_enabledClick
+      end
+    end
+    object MenuItem1: TMenuItem
+      Text = 'Sounds'
+      object MenuItem_sounds_enabled: TMenuItem
+        Locked = True
+        IsChecked = True
+        Text = 'Enabled'
+        OnClick = MenuItem_sounds_enabledClick
+      end
+      object MenuItem_M1_sounds: TMenuItem
+        Locked = True
+        AutoCheck = True
+        Text = 'M1 sounds'
+      end
+    end
+    object MenuItem2: TMenuItem
+      Text = 'Window'
+      object MenuItem_stay_on_top: TMenuItem
+        Locked = True
+        IsChecked = True
+        Text = 'Stay on top'
+        OnClick = MenuItem_stay_on_topClick
+      end
+    end
+    object MenuItem3: TMenuItem
+      Text = 'Trading (experimental)'
+      object MenuItem_engulf_all_3: TMenuItem
+        Locked = True
+        AutoCheck = True
+        Text = 'Only full engulfs of all 3'
+      end
+      object MenuItem_engulf_wick: TMenuItem
+        Locked = True
+        AutoCheck = True
+        Text = 'Require close to also engulf previous wick'
+      end
+    end
+  end
+end

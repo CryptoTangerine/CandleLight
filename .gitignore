@@ -67,3 +67,5 @@ win32/
 
 # Boss dependency manager vendor folder https://github.com/HashLoad/boss
 modules/
+
+Bin/*.txt
